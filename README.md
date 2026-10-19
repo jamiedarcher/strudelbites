@@ -6,13 +6,15 @@ Snap blocks together and they become real Strudel code that plays instantly. Cle
 
 **▶ Try it:** https://jamiedarcher.github.io/strudelbites/
 
-## What's inside (v0.1)
+## What's inside (v0.2)
 
 - **Learn** with two lesson paths:
-  - 🥁 **Beats & code**: Make a sound · The beat · Rests and rhythm · Layers
-  - 🎼 **Read music**: Meet the staff · Long and short notes
+  - 🥁 **Beats & code**: Make a sound · The beat · Rests and rhythm · Layers · Fast and slow · High and low · Happy and sad · Chords
+  - 🎼 **Read music**: Meet the staff · Long and short · Rhythm reading · Short and smooth · Scales · Chords on the staff
 - **Compose**: every block, no lessons — just make music.
-- **Two views of your song**: the real **Code**, and the **Staff** (music notation with rainbow notes).
+- **Two views of your song**: the real **Code**, and the **Staff** (music notation with rainbow notes, flats, staccato dots, slurs and chords).
+- **Play-along**: blocks, beat squares and staff notes light up as they sound; Clef dances in time.
+- **Safe volume**: a built-in limiter keeps everything at a comfortable level.
 - Clef speaks every instruction; blocks are picture-first; big touch targets for iPad.
 - Player profiles with stars, saved in the browser. No accounts.
 

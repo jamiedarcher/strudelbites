@@ -5,9 +5,9 @@ Everything about the blocks learners drag around.
 | File | What it does |
 | --- | --- |
 | `catalog.js` | The musical materials: sounds, notes, note lengths and instruments, with their emoji, colours and staff positions. Add a sound here and it appears everywhere. |
-| `definitions.js` | The block shapes (My song, play, beat, melody, note). |
+| `definitions.js` | The block shapes: My song, play, beat (4 and 8 steps), faster/slower, melody (with normal / bouncy / smooth style), note, scale tune, step, chords. |
 | `fieldSteps.js` | The custom row of tappable squares used by beat blocks. |
-| `model.js` | Turns blocks into a plain **song model** (a list of tracks), then into Strudel code. |
+| `model.js` | Turns blocks into a plain **song model** (a list of tracks), then into Strudel code. Also works out play-along timing (which note is sounding). |
 | `workspace.js` | Blockly setup: theme, palette (toolbox) and the empty starting song. |
 
 ## How a block becomes sound

@@ -12,6 +12,14 @@ import c3 from './c3-rests.js';
 import c4 from './c4-layers.js';
 import t1 from './t1-meet-the-staff.js';
 import t2 from './t2-long-and-short.js';
+import c5 from './c5-fast-and-slow.js';
+import c6 from './c6-high-and-low.js';
+import c7 from './c7-happy-and-sad.js';
+import c8 from './c8-chords.js';
+import t3 from './t3-rhythm-reading.js';
+import t4 from './t4-short-and-smooth.js';
+import t5 from './t5-scales.js';
+import t6 from './t6-chords.js';
 
 /** The two learning paths shown on the lesson map. */
 export const PATHS = [
@@ -23,8 +31,11 @@ export const PATHS = [
       c2,
       c3,
       c4,
-      { id: 'c5', path: 'code', icon: '🐇', comingSoon: true },
-      { id: 'c6', path: 'code', icon: '🎹', comingSoon: true },
+      c5,
+      c6,
+      c7,
+      c8,
+      { id: 'c9', path: 'code', icon: '🔁', comingSoon: true },
     ],
   },
   {
@@ -33,10 +44,11 @@ export const PATHS = [
     lessons: [
       t1,
       t2,
-      { id: 't3', path: 'theory', icon: '👣', comingSoon: true },
-      { id: 't4', path: 'theory', icon: '✂️', comingSoon: true },
-      { id: 't5', path: 'theory', icon: '🪜', comingSoon: true },
-      { id: 't6', path: 'theory', icon: '🌈', comingSoon: true },
+      t3,
+      t4,
+      t5,
+      t6,
+      { id: 't7', path: 'theory', icon: '🔑', comingSoon: true },
     ],
   },
 ];

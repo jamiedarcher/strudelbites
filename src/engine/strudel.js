@@ -6,11 +6,56 @@
  * all Strudel calls here means the app could swap or upgrade Strudel in one place.
  */
 import { initStrudel, samples } from '@strudel/web';
+import { getAudioContext } from 'superdough';
 
 let replPromise = null;
 let playing = false;
 let previewTimer = null;
 const listeners = new Set();
+const hitListeners = new Set();
+
+/** Master volume, below full so nothing is ever painfully loud for small ears. */
+const MASTER_VOLUME = 0.75;
+
+/**
+ * Called by the played code (see `songCode({ hooks: true })`) each time a
+ * track makes a sound. Strudel schedules sound slightly ahead, so we wait
+ * until the sound is actually heard before telling the screen.
+ * @param {number} leaf - Which track (leaf number).
+ * @returns {Function} A Strudel onTrigger callback.
+ */
+globalThis.__sbHit = (leaf) => (hap, currentTime, _cps, targetTime) => {
+  const delay = Math.max(0, (targetTime - currentTime) * 1000);
+  const cycle = hap.whole ? hap.whole.begin.valueOf() : 0;
+  setTimeout(() => hitListeners.forEach((fn) => fn(leaf, cycle)), delay);
+};
+
+/**
+ * Puts a gentle limiter and a volume cap between Strudel and the speakers.
+ * Strudel connects its final mixer straight to the speakers
+ * (`audioContext.destination`), so we redirect any connection to the
+ * speakers through our limiter instead. Runs once.
+ */
+function installLimiter() {
+  const ac = getAudioContext();
+  if (ac.__strudelbitesLimiter) return;
+  const limiter = ac.createDynamicsCompressor();
+  limiter.threshold.value = -10;
+  limiter.knee.value = 6;
+  limiter.ratio.value = 12;
+  limiter.attack.value = 0.003;
+  limiter.release.value = 0.25;
+  const master = ac.createGain();
+  master.gain.value = MASTER_VOLUME;
+  limiter.connect(master);
+  master.connect(ac.destination);
+  const connect = AudioNode.prototype.connect;
+  AudioNode.prototype.connect = function (target, ...rest) {
+    if (target === ac.destination && this !== master) return connect.call(this, limiter, ...rest);
+    return connect.call(this, target, ...rest);
+  };
+  ac.__strudelbitesLimiter = true;
+}
 
 /**
  * Tells everyone listening that the engine changed (started, stopped or failed).
@@ -45,6 +90,7 @@ export function startEngine() {
 export async function play(code) {
   clearTimeout(previewTimer);
   const repl = await startEngine();
+  installLimiter();
   await repl.evaluate(code?.trim() ? code : 'silence');
   playing = true;
   emit({ playing, error: null });
@@ -100,4 +146,14 @@ export function isPlaying() {
 export function onEngineChange(fn) {
   listeners.add(fn);
   return () => listeners.delete(fn);
+}
+
+/**
+ * Subscribes to play-along events: called each time a track makes a sound.
+ * @param {(leaf: number, cycle: number) => void} fn - Receives the track (leaf) number and the time in cycles.
+ * @returns {() => void} Call this to unsubscribe.
+ */
+export function onHit(fn) {
+  hitListeners.add(fn);
+  return () => hitListeners.delete(fn);
 }

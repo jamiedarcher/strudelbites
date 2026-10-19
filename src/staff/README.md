@@ -7,3 +7,7 @@
 - One Strudel cycle = one bar of 4/4. Note lengths come from `LENGTHS` in `blocks/catalog.js`.
 
 VexFlow is large, so this module is loaded only when the Staff tab is first opened.
+
+Also drawn: flats (♭) in minor scales, staccato dots, legato slurs, chords stacked on one stem, and speed changes (twice as fast halves every note).
+
+**Play-along:** `renderStaff` returns a map from each sound to its drawn note; `markPlaying` makes that note glow while it is heard.

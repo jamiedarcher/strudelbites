@@ -97,8 +97,8 @@
     padding: 0;
     margin: 0;
     display: flex;
+    flex-wrap: wrap;
     gap: 14px;
-    overflow-x: auto;
     padding-bottom: 6px;
   }
   .bubble {

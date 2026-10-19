@@ -10,6 +10,9 @@
   step's `check()` whether the learner has done it. If so, Clef cheers and
   the next step starts.
 
+  Play-along: the code that is played has hidden hooks (see `songCode`), so
+  each sound reports back; the matching block and staff note light up.
+
   Props:
   - `mode`: 'lesson' or 'compose'.
   - `lesson`: the lesson object (lesson mode only).
@@ -20,7 +23,8 @@
   import { t } from '../lib/i18n.js';
   import { speak, stopSpeaking, setVoiceEnabled } from '../lib/speech.js';
   import { app, TEMPOS, persist, activeProfile, saveWorkspace, saveStep, completeLesson } from '../lib/store.svelte.js';
-  import { play, preview, stop, setTempo, isPlaying, onEngineChange } from '../engine/strudel.js';
+  import { play, preview, stop, setTempo, isPlaying, onEngineChange, onHit } from '../engine/strudel.js';
+  import { songCode, flattenLeaves, leafTiming, eventAt } from '../blocks/model.js';
   import { ALL_BLOCKS } from '../blocks/definitions.js';
   import { nextLesson } from '../lessons/index.js';
   import BlocklyWorkspace from './BlocklyWorkspace.svelte';
@@ -50,10 +54,42 @@
   let showCard = $state(false);
   let advancing = false;
   let liveTimer;
+  let canvas;
+  let views;
 
   const step = $derived(lesson ? lesson.steps[stepIndex] : null);
   const highlightTarget = $derived(step?.highlight ?? '');
   const focus = $derived(step?.focus ?? []);
+  // Clef dances in time while music plays, unless busy talking or cheering.
+  const clefMood = $derived(playing && mood === 'idle' ? 'dance' : mood);
+  const beatSeconds = $derived(1 / (TEMPOS[app.tempo].cps * 4));
+  // Timing for each sound-making track, used to work out which note is playing.
+  const leaves = $derived(flattenLeaves(tracks).map(({ track, factor }) => ({ track, timing: leafTiming(track, factor) })));
+
+  /**
+   * Plays the current song, with play-along hooks added.
+   * @returns {Promise<void>}
+   */
+  function playSong() {
+    return play(songCode(tracks, { hooks: true }));
+  }
+
+  /**
+   * Lights up whatever just made a sound: its block (or note block, or beat
+   * square) and its note on the staff.
+   * @param {number} leaf - Track (leaf) number.
+   * @param {number} cycle - When the sound started, in cycles.
+   */
+  function handleHit(leaf, cycle) {
+    const info = leaves[leaf];
+    if (!info) return;
+    const index = eventAt(info.timing, cycle);
+    const { track } = info;
+    if (track.kind === 'beat') canvas?.hit(track.id, index);
+    else if (track.kind === 'melody' || track.kind === 'scale') canvas?.hit(track.notes[index]?.id ?? track.id);
+    else canvas?.hit(track.id);
+    views?.now(leaf, index);
+  }
 
   /**
    * Makes Clef say something, animating the mouth while speaking.
@@ -129,7 +165,7 @@
     saveWorkspace(key, song.json);
     if (playing) {
       clearTimeout(liveTimer);
-      liveTimer = setTimeout(() => play(code), 250);
+      liveTimer = setTimeout(playSong, 250);
     }
   }
 
@@ -140,7 +176,7 @@
     } else if (!code) {
       say(t('studio.emptySong'));
     } else {
-      play(code);
+      playSong();
     }
   }
 
@@ -190,10 +226,12 @@
       playing = state.playing;
       if (state.error) error = t('studio.error');
     });
+    const unsubscribeHits = onHit(handleHit);
     if (lesson) enterStep();
     else say(t('clef.compose'));
     return () => {
       unsubscribe();
+      unsubscribeHits();
       clearTimeout(liveTimer);
     };
   });
@@ -228,7 +266,8 @@
       <LessonPanel
         {lesson}
         {stepIndex}
-        {mood}
+        mood={clefMood}
+        beat={beatSeconds}
         {hint}
         onlisten={listen}
         onconfirm={advance}
@@ -239,10 +278,11 @@
     {/if}
     <div class="main">
       <div class="canvas">
-        <BlocklyWorkspace {blocks} {initial} onchange={handleChange} flash={highlightTarget === 'toolbox'} />
+        <BlocklyWorkspace bind:this={canvas} {blocks} {initial} onchange={handleChange} flash={highlightTarget === 'toolbox'} />
         {#if error}<div class="toast" role="status">🤔 {error}</div>{/if}
       </div>
       <ViewPanel
+        bind:this={views}
         open={panelOpen}
         tab={panel}
         ontab={(tab) => {

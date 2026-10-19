@@ -66,3 +66,65 @@ export const INSTRUMENTS = [
 export function byId(list, id) {
   return list.find((item) => item.id === id);
 }
+
+/**
+ * Speeds for the "faster / slower" wrapper block. `factor` multiplies the
+ * speed: 2 = twice as fast (Strudel `.fast(2)`), 0.5 = half speed (`.slow(2)`).
+ */
+export const SPEEDS = [
+  { id: 'fast2', emoji: '🐇', factor: 2 },
+  { id: 'slow2', emoji: '🐢', factor: 0.5 },
+];
+
+/**
+ * Scales for the "scale tune" block. `notes` are the 8 rungs of the ladder
+ * (step 1 to step 8), written as Strudel note names with flats as `b`.
+ * `id` is the Strudel scale name.
+ */
+export const SCALES = [
+  { id: 'C4:major', emoji: '😀', notes: ['c4', 'd4', 'e4', 'f4', 'g4', 'a4', 'b4', 'c5'] },
+  { id: 'C4:minor', emoji: '😢', notes: ['c4', 'd4', 'eb4', 'f4', 'g4', 'ab4', 'bb4', 'c5'] },
+];
+
+/** Chords for the chords block: three notes played together (a triad). */
+export const CHORDS = [
+  { id: 'C', notes: ['c4', 'e4', 'g4'] },
+  { id: 'Dm', notes: ['d4', 'f4', 'a4'] },
+  { id: 'Em', notes: ['e4', 'g4', 'b4'] },
+  { id: 'F', notes: ['f4', 'a4', 'c5'] },
+  { id: 'G', notes: ['g4', 'b4', 'd5'] },
+  { id: 'Am', notes: ['a4', 'c5', 'e5'] },
+];
+
+/**
+ * Melody playing styles (articulation). `legato` is the Strudel value that
+ * sets how much of each step a note fills: 0.3 = short and bouncy, 1.5 =
+ * smooth notes that overlap. `null` means "normal" (no extra code).
+ */
+export const STYLES = [
+  { id: 'normal', emoji: '🙂', legato: null },
+  { id: 'staccato', emoji: '🏀', legato: 0.3 },
+  { id: 'legato', emoji: '🌊', legato: 1.5 },
+];
+
+/**
+ * Turns a Strudel note name into its staff key and accidental.
+ * @param {string} name - Note name such as `"eb4"`, `"c5"` or `"g4"`.
+ * @returns {{key: string, accidental: string|null, letter: string}} VexFlow key (`"e/4"`), accidental (`"b"`, `"#"` or null) and the letter (`"e"`).
+ * @example staffKey('bb4') // { key: 'b/4', accidental: 'b', letter: 'b' }
+ */
+export function staffKey(name) {
+  const [, letter, accidental, octave] = name.match(/^([a-g])(b|#)?(\d)$/);
+  return { key: `${letter}/${octave}`, accidental: accidental ?? null, letter };
+}
+
+/**
+ * The rainbow colour for any note name, matching the note blocks.
+ * Flats and sharps share their letter's colour.
+ * @param {string} name - Note name such as `"ab4"`.
+ * @returns {string} A hex colour.
+ */
+export function noteColour(name) {
+  const letter = name[0];
+  return NOTES.find((n) => n.id.startsWith(letter))?.colour ?? '#868E96';
+}

@@ -41,6 +41,17 @@ const PALETTE = {
   strudel_beat4: [{ kind: 'block', type: 'strudel_beat4' }],
   strudel_beat8: [{ kind: 'block', type: 'strudel_beat8' }],
   strudel_melody: [{ kind: 'block', type: 'strudel_melody' }],
+  strudel_speed: [
+    { kind: 'block', type: 'strudel_speed', fields: { SPEED: 'fast2' } },
+    { kind: 'block', type: 'strudel_speed', fields: { SPEED: 'slow2' } },
+  ],
+  strudel_scale_tune: [{ kind: 'block', type: 'strudel_scale_tune' }],
+  strudel_step: ['0', '1', '2', '3', '4', '5', '6', '7', 'rest'].map((degree) => ({
+    kind: 'block',
+    type: 'strudel_step',
+    fields: { DEGREE: degree, LEN: 'q' },
+  })),
+  strudel_chords: [{ kind: 'block', type: 'strudel_chords' }],
   strudel_note: ['c4', 'd4', 'e4', 'f4', 'g4', 'a4', 'b4', 'c5', 'rest'].map((pitch) => ({
     kind: 'block',
     type: 'strudel_note',

@@ -52,7 +52,8 @@
     "emptySong": "Put a block inside My song first!",
     "error": "Hmm, that didn't work. Try changing a block.",
     "composeTitle": "Compose",
-    "step": "Step {n} of {total}"
+    "step": "Step {n} of {total}",
+    "readThis": "Read this:"
   },
   "blocks": {
     "song": "My song",
@@ -86,14 +87,39 @@
       "sound": "Plays one sound, once every bar. Code: s(\"bd\")",
       "beat4": "Four steps. Tap a square to turn it on or off. Code: s(\"bd ~ bd ~\")",
       "beat8": "Eight quick steps. Code: s(\"hh hh hh hh hh hh hh hh\")",
-      "melody": "Put notes inside to play a tune. Code: note(\"c4 e4 g4\")",
-      "note": "One note. Pick how high it is and how long it lasts."
+      "melody": "Put notes inside to play a tune. Pick normal, bouncy or smooth. Code: note(\"c4 e4 g4\")",
+      "note": "One note. Pick how high it is and how long it lasts.",
+      "speed": "Put tracks inside to play them twice as fast, or half as fast. Code: .fast(2) or .slow(2)",
+      "scale": "A tune made of steps on a scale ladder. Code: n(\"0 2 4\").scale(\"C4:major\")",
+      "step": "One step of the scale ladder. Step 1 is the bottom, step 8 is the top.",
+      "chords": "Four chords, two beats each. Code: note(\"[c4,e4,g4] ...\")"
+    },
+    "step": "step",
+    "chords": "chords",
+    "speeds": {
+      "fast2": "faster ×2",
+      "slow2": "slower ÷2"
+    },
+    "scales": {
+      "C4:major": "happy (major)",
+      "C4:minor": "sad (minor)"
+    },
+    "styles": {
+      "normal": "normal",
+      "staccato": "bouncy",
+      "legato": "smooth"
     }
   },
   "clef": {
     "hello": "Hi {name}! I'm Clef. Let's make music!",
     "helloNoName": "Hi! I'm Clef. Let's make music!",
-    "yay": ["Yay!", "Brilliant!", "You did it!", "Wow, nice!", "Super!"],
+    "yay": [
+      "Yay!",
+      "Brilliant!",
+      "You did it!",
+      "Wow, nice!",
+      "Super!"
+    ],
     "lessonDone": "You finished the lesson! You earned a star!",
     "compose": "Make anything you like! Press Play to hear it."
   },
@@ -108,10 +134,21 @@
     "c1": {
       "title": "Make a sound",
       "steps": {
-        "listen": { "say": "Let's listen first! Press the big ear button." },
-        "drag": { "say": "Find the pink play block. Drag it inside My song.", "hint": "The pink block is on the left. Drop it just under My song, so it clicks in." },
-        "play": { "say": "Now press the green Play button at the top!", "hint": "The Play button is green with a triangle." },
-        "change": { "say": "Tap the little arrow on your block and pick a different sound. Try the sheep!", "hint": "Tap the word kick on your block. A list of sounds pops up." }
+        "listen": {
+          "say": "Let's listen first! Press the big ear button."
+        },
+        "drag": {
+          "say": "Find the pink play block. Drag it inside My song.",
+          "hint": "The pink block is on the left. Drop it just under My song, so it clicks in."
+        },
+        "play": {
+          "say": "Now press the green Play button at the top!",
+          "hint": "The Play button is green with a triangle."
+        },
+        "change": {
+          "say": "Tap the little arrow on your block and pick a different sound. Try the sheep!",
+          "hint": "Tap the word kick on your block. A list of sounds pops up."
+        }
       },
       "card": {
         "music": "Sound",
@@ -123,11 +160,25 @@
     "c2": {
       "title": "The beat",
       "steps": {
-        "listen": { "say": "This is a beat. Clap along with it! Press the ear button." },
-        "drag": { "say": "Drag the purple beat block, the one with squares, inside My song.", "hint": "It's the purple block with four squares." },
-        "fill": { "say": "Tap all four squares to turn them on.", "hint": "Tap each grey square once. It turns white when it's on." },
-        "play": { "say": "Press Play. Can you hear four kicks? That's the beat!", "hint": "Press the green Play button." },
-        "code": { "say": "Look at the code. Each kick is written as b d. Four kicks, one after another. That's called a sequence!", "hint": "The code is on the right side." }
+        "listen": {
+          "say": "This is a beat. Clap along with it! Press the ear button."
+        },
+        "drag": {
+          "say": "Drag the purple beat block, the one with squares, inside My song.",
+          "hint": "It's the purple block with four squares."
+        },
+        "fill": {
+          "say": "Tap all four squares to turn them on.",
+          "hint": "Tap each grey square once. It turns white when it's on."
+        },
+        "play": {
+          "say": "Press Play. Can you hear four kicks? That's the beat!",
+          "hint": "Press the green Play button."
+        },
+        "code": {
+          "say": "Look at the code. Each kick is written as b d. Four kicks, one after another. That's called a sequence!",
+          "hint": "The code is on the right side."
+        }
       },
       "card": {
         "music": "Beat",
@@ -139,12 +190,29 @@
     "c3": {
       "title": "Rests and rhythm",
       "steps": {
-        "listen": { "say": "Listen. Some steps are quiet! A quiet step is called a rest." },
-        "drag": { "say": "Drag a beat block inside My song.", "hint": "The purple block with squares." },
-        "pattern": { "say": "Turn on only the first and the third squares.", "hint": "On, off, on, off. Tap a white square to turn it off." },
-        "play": { "say": "Press Play. Boom, rest, boom, rest. Can you hear the gaps?", "hint": "Press the green Play button." },
-        "code": { "say": "In the code, a rest is a squiggle. Can you find the squiggles?", "hint": "They are glowing yellow in the code." },
-        "own": { "say": "Now make your own rhythm! Leave at least one square off.", "hint": "Tap squares on and off until you like how it sounds." }
+        "listen": {
+          "say": "Listen. Some steps are quiet! A quiet step is called a rest."
+        },
+        "drag": {
+          "say": "Drag a beat block inside My song.",
+          "hint": "The purple block with squares."
+        },
+        "pattern": {
+          "say": "Turn on only the first and the third squares.",
+          "hint": "On, off, on, off. Tap a white square to turn it off."
+        },
+        "play": {
+          "say": "Press Play. Boom, rest, boom, rest. Can you hear the gaps?",
+          "hint": "Press the green Play button."
+        },
+        "code": {
+          "say": "In the code, a rest is a squiggle. Can you find the squiggles?",
+          "hint": "They are glowing yellow in the code."
+        },
+        "own": {
+          "say": "Now make your own rhythm! Leave at least one square off.",
+          "hint": "Tap squares on and off until you like how it sounds."
+        }
       },
       "card": {
         "music": "Rest",
@@ -156,12 +224,29 @@
     "c4": {
       "title": "Layers",
       "steps": {
-        "listen": { "say": "This is a rock beat. Three instruments are playing at the same time!" },
-        "kick": { "say": "Put a beat block inside My song. Make it kick on squares one and three.", "hint": "Pick the drum, then turn on the first and third squares." },
-        "snare": { "say": "Add another beat block underneath. Pick the snare, and turn on squares two and four.", "hint": "Tap kick on the new block and choose snare." },
-        "hats": { "say": "Now add the long blue beat block. Pick the hi-hat, and turn on all eight squares.", "hint": "The blue block has eight squares. The hi-hat has a top hat." },
-        "play": { "say": "Press Play. You made a rock beat!", "hint": "Press the green Play button." },
-        "code": { "say": "See the word stack in the code? Stack means: play these together.", "hint": "Stack is glowing at the top of the code." }
+        "listen": {
+          "say": "This is a rock beat. Three instruments are playing at the same time!"
+        },
+        "kick": {
+          "say": "Put a beat block inside My song. Make it kick on squares one and three.",
+          "hint": "Pick the drum, then turn on the first and third squares."
+        },
+        "snare": {
+          "say": "Add another beat block underneath. Pick the snare, and turn on squares two and four.",
+          "hint": "Tap kick on the new block and choose snare."
+        },
+        "hats": {
+          "say": "Now add the long blue beat block. Pick the hi-hat, and turn on all eight squares.",
+          "hint": "The blue block has eight squares. The hi-hat has a top hat."
+        },
+        "play": {
+          "say": "Press Play. You made a rock beat!",
+          "hint": "Press the green Play button."
+        },
+        "code": {
+          "say": "See the word stack in the code? Stack means: play these together.",
+          "hint": "Stack is glowing at the top of the code."
+        }
       },
       "card": {
         "music": "Layers",
@@ -170,17 +255,100 @@
         "codeText": "stack() plays patterns side by side, all at once. Programmers call this running in parallel."
       }
     },
-    "c5": { "title": "Fast and slow" },
-    "c6": { "title": "High and low" },
+    "c5": {
+      "title": "Fast and slow",
+      "steps": {
+        "listen": {
+          "say": "Listen. The same beat plays at normal speed, then twice as fast!"
+        },
+        "beat": {
+          "say": "Put a beat block in My song. Turn on all four squares.",
+          "hint": "The purple block with squares. Tap every square."
+        },
+        "wrap": {
+          "say": "Find the orange rabbit block. Drag it into My song, and put your beat inside it.",
+          "hint": "Drag the rabbit block in first, then drag your beat into the rabbit's mouth."
+        },
+        "play": {
+          "say": "Press Play. Zoom! Everything is twice as fast.",
+          "hint": "Press the green Play button."
+        },
+        "slow": {
+          "say": "Now tap the rabbit and pick the turtle. Slow and sleepy!",
+          "hint": "Tap the words faster times two, then choose the turtle."
+        },
+        "code": {
+          "say": "Look at the code. fast and slow have a number in brackets. That number is called a parameter. It tells the function how much.",
+          "hint": "The glowing words at the end of the code."
+        }
+      },
+      "card": {
+        "music": "Tempo",
+        "musicText": "Tempo is how fast music goes. Twice as fast makes every sound twice as short.",
+        "code": "Parameter",
+        "codeText": "In .fast(2), the 2 is a parameter: a number you give a function to change what it does."
+      }
+    },
+    "c6": {
+      "title": "High and low",
+      "steps": {
+        "listen": {
+          "say": "Listen. Low C, then high C. Same note name, but one is higher!"
+        },
+        "melody": {
+          "say": "Drag the green melody block into My song.",
+          "hint": "The green block with a gap inside."
+        },
+        "lowhigh": {
+          "say": "Put in a red low C, and the dark red high C.",
+          "hint": "There are two red C notes. The second red one at the bottom is the high C."
+        },
+        "play": {
+          "say": "Press Play. Low, high, low, high!",
+          "hint": "Press the green Play button."
+        },
+        "code": {
+          "say": "In the code, c4 and c5 are both C. The number tells how high. Five is higher than four!",
+          "hint": "c4 and c5 are glowing in the code."
+        },
+        "climb": {
+          "say": "Now make a tune with four notes that climbs up, higher and higher!",
+          "hint": "Each note must be higher than the one before. Try C, E, G, high C."
+        }
+      },
+      "card": {
+        "music": "Pitch",
+        "musicText": "Pitch is how high or low a note sounds. C5 is the same note as C4, just higher.",
+        "code": "Value",
+        "codeText": "\"c4\" is a value: a piece of data. Change the value and the sound changes."
+      }
+    },
     "t1": {
       "title": "Meet the staff",
       "steps": {
-        "listen": { "say": "Listen. These notes go up, like walking up stairs!" },
-        "melody": { "say": "Drag the green melody block inside My song.", "hint": "It's the green block with a gap inside." },
-        "notes": { "say": "Put three notes inside the melody. Red C, then orange D, then yellow E.", "hint": "Drag the red note in first. Then orange, then yellow underneath." },
-        "staff": { "say": "Tap the Staff button to see your music written down!", "hint": "The Staff button is at the top of the right side." },
-        "look": { "say": "These five lines are called a staff. Higher notes sit higher on the staff. C sits on its own little line underneath!", "hint": "Look at the red, orange and yellow notes climbing." },
-        "play": { "say": "Press Play and sing along: C, D, E!", "hint": "Press the green Play button." }
+        "listen": {
+          "say": "Listen. These notes go up, like walking up stairs!"
+        },
+        "melody": {
+          "say": "Drag the green melody block inside My song.",
+          "hint": "It's the green block with a gap inside."
+        },
+        "notes": {
+          "say": "Put three notes inside the melody. Red C, then orange D, then yellow E.",
+          "hint": "Drag the red note in first. Then orange, then yellow underneath."
+        },
+        "staff": {
+          "say": "Tap the Staff button to see your music written down!",
+          "hint": "The Staff button is at the top of the right side."
+        },
+        "look": {
+          "say": "These five lines are called a staff. Higher notes sit higher on the staff. C sits on its own little line underneath!",
+          "hint": "Look at the red, orange and yellow notes climbing."
+        },
+        "play": {
+          "say": "Press Play and sing along: C, D, E!",
+          "hint": "Press the green Play button."
+        }
       },
       "card": {
         "music": "The staff",
@@ -192,13 +360,33 @@
     "t2": {
       "title": "Long and short",
       "steps": {
-        "listen": { "say": "Listen. Some notes are long, and some are short." },
-        "notes": { "say": "Make a melody with at least two notes.", "hint": "Drag the melody block in, then put notes inside it." },
-        "half": { "say": "Change one note to a half note. It lasts two beats. On the staff it has an empty, hollow head!", "hint": "Tap the word quarter on a note and choose half." },
-        "whole": { "say": "Now try a whole note. It lasts four beats, and it has no stick!", "hint": "Tap quarter or half on a note and choose whole." },
-        "fill": { "say": "Fill one bar: make your notes add up to exactly four beats.", "hint": "A whole note is 4 beats. A half note is 2. A quarter note is 1." },
-        "play": { "say": "Press Play and count along: one, two, three, four!", "hint": "Press the green Play button." },
-        "code": { "say": "In the code, the at sign makes a note longer. A bigger number means a longer note.", "hint": "The at signs are glowing yellow." }
+        "listen": {
+          "say": "Listen. Some notes are long, and some are short."
+        },
+        "notes": {
+          "say": "Make a melody with at least two notes.",
+          "hint": "Drag the melody block in, then put notes inside it."
+        },
+        "half": {
+          "say": "Change one note to a half note. It lasts two beats. On the staff it has an empty, hollow head!",
+          "hint": "Tap the word quarter on a note and choose half."
+        },
+        "whole": {
+          "say": "Now try a whole note. It lasts four beats, and it has no stick!",
+          "hint": "Tap quarter or half on a note and choose whole."
+        },
+        "fill": {
+          "say": "Fill one bar: make your notes add up to exactly four beats.",
+          "hint": "A whole note is 4 beats. A half note is 2. A quarter note is 1."
+        },
+        "play": {
+          "say": "Press Play and count along: one, two, three, four!",
+          "hint": "Press the green Play button."
+        },
+        "code": {
+          "say": "In the code, the at sign makes a note longer. A bigger number means a longer note.",
+          "hint": "The at signs are glowing yellow."
+        }
       },
       "card": {
         "music": "Note length",
@@ -207,9 +395,223 @@
         "codeText": "In c4@2, the @ makes that note last twice as long as the others."
       }
     },
-    "t3": { "title": "Rhythm reading" },
-    "t4": { "title": "Short and smooth" },
-    "t5": { "title": "Scales" },
-    "t6": { "title": "Chords" }
+    "t3": {
+      "title": "Rhythm reading",
+      "steps": {
+        "listen": {
+          "say": "Listen and count: one, two, three, four."
+        },
+        "melody": {
+          "say": "Drag a melody block into My song.",
+          "hint": "The green block with a gap inside."
+        },
+        "read1": {
+          "say": "Read the music in the box. Two quarter notes, then a half note. Can you build it?",
+          "hint": "Quarter notes have a filled head and a stick. A half note has a hollow head."
+        },
+        "count": {
+          "say": "Look at your staff. Count it: one, two, three, four. The half note gets two counts!",
+          "hint": "The half note is held for three and four."
+        },
+        "read2": {
+          "say": "Read this one. The squiggly sign is a quarter rest. Be quiet for one beat!",
+          "hint": "Note, rest, note, note. Use the shh note for the rest."
+        },
+        "code": {
+          "say": "In the code, the rest is a squiggle. Quiet for one step.",
+          "hint": "The squiggle is glowing."
+        }
+      },
+      "card": {
+        "music": "Rhythm",
+        "musicText": "Rhythm is the pattern of long, short and silent beats. To read it, count the beats.",
+        "code": "Rest ~",
+        "codeText": "In note(\"e4 ~ e4 e4\"), the ~ is a rest: one beat of silence."
+      }
+    },
+    "t4": {
+      "title": "Short and smooth",
+      "steps": {
+        "listen": {
+          "say": "Listen. First the notes are short and bouncy. Then they are smooth and joined up."
+        },
+        "notes": {
+          "say": "Make a melody with at least three notes.",
+          "hint": "Drag the melody block in, then add notes."
+        },
+        "bouncy": {
+          "say": "Tap normal on your melody block and choose bouncy.",
+          "hint": "The word normal is next to melody."
+        },
+        "dots": {
+          "say": "Look at the staff. Each note has a little dot. A dot means short and bouncy. Musicians call it staccato!",
+          "hint": "Look for dots under the notes."
+        },
+        "smooth": {
+          "say": "Now choose smooth.",
+          "hint": "Tap bouncy and pick smooth."
+        },
+        "slur": {
+          "say": "See the curved line over the notes? It's called a slur. It means smooth and joined up: legato!",
+          "hint": "The curve goes from the first note to the last."
+        },
+        "play": {
+          "say": "Press Play and listen to your smooth tune.",
+          "hint": "Press the green Play button."
+        }
+      },
+      "card": {
+        "music": "Articulation",
+        "musicText": "Staccato notes are short and bouncy: a dot. Legato notes are smooth and joined: a curved slur.",
+        "code": "legato()",
+        "codeText": ".legato(0.3) makes each note short. .legato(1.5) makes notes overlap smoothly."
+      }
+    },
+    "t5": {
+      "title": "Scales",
+      "steps": {
+        "listen": {
+          "say": "Listen. A scale climbs up, step by step, like a ladder."
+        },
+        "tune": {
+          "say": "Drag the ladder block, the scale tune, into My song.",
+          "hint": "The green block with a ladder."
+        },
+        "build": {
+          "say": "Read the music. Build the whole ladder: steps 1, 2, 3, 4, 5, 6, 7, 8.",
+          "hint": "Add eight steps. Change each number so they go up one at a time."
+        },
+        "staff": {
+          "say": "Look at the staff. Each note sits one step higher: line, space, line, space!",
+          "hint": "Follow the notes up like stairs."
+        },
+        "minor": {
+          "say": "Now change the ladder from happy to sad.",
+          "hint": "Tap happy and choose sad."
+        },
+        "flats": {
+          "say": "Look! Some notes now have a flat sign. A flat makes a note a tiny bit lower.",
+          "hint": "The flat sign looks like a small b."
+        },
+        "play": {
+          "say": "Press Play. Listen to your sad scale.",
+          "hint": "Press the green Play button."
+        }
+      },
+      "card": {
+        "music": "Scale",
+        "musicText": "A scale is a ladder of notes going up step by step. Minor scales have flats.",
+        "code": "scale()",
+        "codeText": "n(\"0 1 2 3\").scale(\"C4:minor\"): the same step numbers, a different ladder."
+      }
+    },
+    "t6": {
+      "title": "Chords on the staff",
+      "steps": {
+        "listen": {
+          "say": "Listen to four chords."
+        },
+        "chords": {
+          "say": "Drag the chords block into My song.",
+          "hint": "The purple block with chord names."
+        },
+        "staff": {
+          "say": "Tap the Staff button to see your chords.",
+          "hint": "The Staff button is at the bottom."
+        },
+        "snowman": {
+          "say": "On the staff, a chord's notes are stacked on top of each other, like a snowman!",
+          "hint": "Each chord is three notes in one column."
+        },
+        "read": {
+          "say": "Read the chord names in the box: C, A minor, F, G. Make your chords match!",
+          "hint": "Tap each chord name on your block and change it."
+        },
+        "play": {
+          "say": "Press Play. That's a famous chord pattern in lots of songs!",
+          "hint": "Press the green Play button."
+        }
+      },
+      "card": {
+        "music": "Chords on the staff",
+        "musicText": "A chord is written as notes stacked up. The C chord is C, E and G.",
+        "code": "[c4,e4,g4]",
+        "codeText": "Brackets with commas: notes that play at the same time."
+      }
+    },
+    "c7": {
+      "title": "Happy and sad",
+      "steps": {
+        "listen": {
+          "say": "Listen. The same tune sounds happy, then sad!"
+        },
+        "tune": {
+          "say": "Drag the green ladder block, the scale tune, into My song.",
+          "hint": "It has a ladder at the front."
+        },
+        "steps": {
+          "say": "Put three steps inside: step 1, step 3, and step 5.",
+          "hint": "Drag in a step and tap its number to change it."
+        },
+        "play": {
+          "say": "Press Play. Does it sound happy?",
+          "hint": "Press the green Play button."
+        },
+        "sad": {
+          "say": "Tap the happy face and choose sad. Listen to the difference!",
+          "hint": "Tap the word happy on the ladder block."
+        },
+        "code": {
+          "say": "The numbers are steps on a ladder. scale picks which ladder. Major sounds happy. Minor sounds sad.",
+          "hint": "Look for scale and minor in the code."
+        }
+      },
+      "card": {
+        "music": "Major and minor",
+        "musicText": "Major scales sound bright and happy. Minor scales sound darker and sad.",
+        "code": "Mapping",
+        "codeText": "n(\"0 2 4\").scale(\"C4:minor\") maps step numbers to real notes, like looking them up in a list."
+      }
+    },
+    "c8": {
+      "title": "Chords",
+      "steps": {
+        "listen": {
+          "say": "Listen. Three notes at the same time make a chord. Chords make music sound full and warm."
+        },
+        "chords": {
+          "say": "Drag the rainbow chords block into My song.",
+          "hint": "The purple block with C, F, G, C on it."
+        },
+        "play": {
+          "say": "Press Play. Those are four chords!",
+          "hint": "Press the green Play button."
+        },
+        "change": {
+          "say": "Tap one chord and change it to A minor. It sounds a little sad!",
+          "hint": "Tap a chord name, then pick Am."
+        },
+        "code": {
+          "say": "In the code, notes inside square brackets with commas play together. That's a chord!",
+          "hint": "Look for the commas between notes."
+        },
+        "drums": {
+          "say": "Add a beat block under your chords. Now you have a band!",
+          "hint": "Drag the purple beat block under the chords."
+        }
+      },
+      "card": {
+        "music": "Chord",
+        "musicText": "A chord is three or more notes played at the same time.",
+        "code": "Grouping",
+        "codeText": "[c4,e4,g4]: square brackets group notes, and commas mean play them together."
+      }
+    },
+    "c9": {
+      "title": "Repeat and change"
+    },
+    "t7": {
+      "title": "Keys and sharps"
+    }
   }
 }

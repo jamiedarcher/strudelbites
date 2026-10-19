@@ -8,6 +8,9 @@
   - `initial`: saved Blockly JSON to restore, or null for an empty song.
   - `onchange({ tracks, code, json })`: called after every real change.
   - `flash`: true to make the palette glow ("drag a block from here").
+
+  Exposes `hit(blockId, step)`: briefly lights up a block (and one square of a
+  beat) while it sounds.
 -->
 <script>
   import { onMount } from 'svelte';
@@ -22,6 +25,21 @@
   function report() {
     const tracks = readSong(workspace);
     onchange({ tracks, code: songCode(tracks), json: Blockly.serialization.workspaces.save(workspace) });
+  }
+
+  /**
+   * Lights up a block while it plays.
+   * @param {string} blockId - Block to light up.
+   * @param {number|null} [step] - For beat blocks, which square.
+   */
+  export function hit(blockId, step = null) {
+    const block = workspace?.getBlockById(blockId);
+    if (!block) return;
+    const root = block.getSvgRoot();
+    root.classList.remove('sb-hit');
+    void root.getBoundingClientRect(); // restart the animation
+    root.classList.add('sb-hit');
+    if (step != null) block.getField('STEPS')?.flashStep?.(step);
   }
 
   onMount(() => {
@@ -83,6 +101,20 @@
   }
   .workspace :global(.sb-step) {
     cursor: pointer;
+  }
+  .workspace :global(.sb-hit > .blocklyPath) {
+    animation: hit 0.3s ease-out;
+  }
+  .workspace :global(.sb-step-hit) {
+    animation: step-hit 0.3s ease-out;
+  }
+  @keyframes hit {
+    from { filter: brightness(1.45) drop-shadow(0 0 6px #ffd43b); }
+    to { filter: none; }
+  }
+  @keyframes step-hit {
+    from { stroke: #ffd43b; stroke-width: 6px; }
+    to { stroke-width: 2px; }
   }
   .workspace :global(.blocklyText) {
     font-size: 17px !important;

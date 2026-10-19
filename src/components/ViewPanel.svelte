@@ -10,23 +10,27 @@
   - `code`, `tracks`: the current song.
   - `focus`: words to spotlight in the code (e.g. `['~']`).
   - `pulse`: 'code' or 'staff' to make that tab glow.
+
+  Exposes `now(leaf, index)`: lights up the note being played on the staff.
 -->
 <script>
   import { t } from '../lib/i18n.js';
   import { highlight } from '../lib/highlight.js';
   import { SOUNDS } from '../blocks/catalog.js';
+  import { flattenLeaves } from '../blocks/model.js';
 
   let { open, tab, ontab, onclose, code, tracks, focus = [], pulse = '' } = $props();
   let staffHost = $state();
   let width = $state(600);
   let names = $state(true);
   let rows = $state(0);
+  let events = new Map();
   // The notation library is large, so it is only downloaded the first time the Staff tab opens.
   let notation = $state(null);
 
   const html = $derived(highlight(code, focus));
   const drumSounds = $derived(
-    [...new Set(tracks.filter((tr) => tr.kind !== 'melody').map((tr) => tr.sound))]
+    [...new Set(flattenLeaves(tracks).map(({ track }) => track.sound).filter(Boolean))]
       .map((id) => SOUNDS.find((s) => s.id === id))
       .filter(Boolean),
   );
@@ -40,12 +44,24 @@
   $effect(() => {
     if (!open || tab !== 'staff' || !staffHost || !notation) return;
     try {
-      rows = notation.renderStaff(staffHost, tracks, { width: Math.min(Math.max(320, width - 300), 900), names });
+      const result = notation.renderStaff(staffHost, tracks, { width: Math.min(Math.max(320, width - 300), 900), names });
+      rows = result.rows;
+      events = result.events;
     } catch (error) {
       console.warn('Staff view could not draw this song', error);
       rows = 0;
+      events = new Map();
     }
   });
+
+  /**
+   * Lights up the note that is playing, if the staff is showing.
+   * @param {number} leaf - Track (leaf) number.
+   * @param {number} index - Event number in that track.
+   */
+  export function now(leaf, index) {
+    if (open && tab === 'staff' && notation) notation.markPlaying(events, leaf, index);
+  }
 </script>
 
 <section class="panel" class:open bind:clientWidth={width}>
@@ -189,6 +205,13 @@
   }
   .staff {
     overflow-x: auto;
+  }
+  .staff :global(.sb-now) {
+    animation: now 0.45s ease-out;
+  }
+  @keyframes now {
+    from { filter: drop-shadow(0 0 5px #fab005) drop-shadow(0 0 3px #fab005); }
+    to { filter: none; }
   }
   .staff-side {
     min-width: 200px;

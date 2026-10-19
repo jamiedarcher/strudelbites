@@ -3,14 +3,16 @@
   Clef, the treble-clef guide. Purely visual: give it a `mood` and it animates.
 
   Props:
-  - `mood`: 'idle' (gentle bob), 'talking' (mouth moves) or 'happy' (jumps).
+  - `mood`: 'idle' (gentle bob), 'talking' (mouth moves), 'happy' (jumps) or
+    'dance' (bounces in time with the music).
   - `size`: width in pixels (height is 1.5×).
+  - `beat`: length of one beat in seconds, for dancing in time.
 -->
 <script>
-  let { mood = 'idle', size = 120 } = $props();
+  let { mood = 'idle', size = 120, beat = 0.5 } = $props();
 </script>
 
-<svg class="clef {mood}" viewBox="0 0 120 180" width={size} height={size * 1.5} role="img" aria-label="Clef">
+<svg class="clef {mood}" style="--beat: {beat}s" viewBox="0 0 120 180" width={size} height={size * 1.5} role="img" aria-label="Clef">
   <g class="body">
     <ellipse cx="60" cy="172" rx="26" ry="5" fill="rgba(0,0,0,0.08)" class="shadow" />
     <g transform="translate(6,4) scale(1.08,1.04)">
@@ -47,6 +49,13 @@
   }
   .happy .body {
     animation: jump 0.5s ease-out 2;
+  }
+  .dance .body {
+    animation: dance var(--beat) ease-in-out infinite alternate;
+  }
+  @keyframes dance {
+    from { transform: translateY(0) rotate(-8deg); }
+    to { transform: translateY(-10px) rotate(8deg); }
   }
   .talking .mouth {
     animation: talk 0.28s ease-in-out infinite alternate;

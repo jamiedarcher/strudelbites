@@ -5,7 +5,8 @@
 
   Props:
   - `lesson`, `stepIndex`: where we are.
-  - `mood`: Clef's mood.
+  - `mood`: Clef's mood. `beat`: beat length in seconds (Clef dances in time).
+  - Steps with a `target` show it as a small staff to read ("Read this").
   - `hint`: hint text currently shown (empty for none).
   - `onlisten()`, `onconfirm()`, `onhint()`, `onskip()`, `onreplay()`: actions.
 -->
@@ -13,13 +14,23 @@
   import { t } from '../lib/i18n.js';
   import Clef from './Clef.svelte';
 
-  let { lesson, stepIndex, mood, hint, onlisten, onconfirm, onhint, onskip, onreplay } = $props();
+  let { lesson, stepIndex, mood, beat = 0.5, hint, onlisten, onconfirm, onhint, onskip, onreplay } = $props();
   const step = $derived(lesson.steps[stepIndex]);
+  let targetHost = $state();
+
+  // Draw the "read this" staff for steps that have a target to copy.
+  $effect(() => {
+    if (!step.target || !targetHost) return;
+    const host = targetHost;
+    import('../staff/notation.js').then(({ renderStaff }) => {
+      renderStaff(host, step.target, { width: host.clientWidth || 230, names: false, scale: 1.15, meter: false });
+    });
+  });
 </script>
 
 <section class="lesson">
   <div class="clef-row">
-    <Clef size={96} {mood} />
+    <Clef size={96} {mood} {beat} />
     <div class="bubble">
       <p>{t(`lessons.${lesson.id}.steps.${step.id}.say`)}</p>
       <button class="icon-btn" onclick={onreplay} aria-label={t('studio.replay')} title={t('studio.replay')}>🔁</button>
@@ -31,6 +42,13 @@
       <li class:done={i < stepIndex} class:current={i === stepIndex}></li>
     {/each}
   </ol>
+
+  {#if step.target}
+    <div class="target">
+      <span class="label">👀 {t('studio.readThis')}</span>
+      <div bind:this={targetHost}></div>
+    </div>
+  {/if}
 
   {#if step.type === 'listen'}
     <button class="btn action listen" onclick={onlisten}>👂 {t('studio.listen')}</button>
@@ -139,6 +157,17 @@
     10% { transform: rotate(-3deg); }
     20% { transform: rotate(3deg); }
     30% { transform: rotate(0); }
+  }
+  .target {
+    background: white;
+    border: 3px dashed #b197fc;
+    border-radius: 18px;
+    padding: 8px 6px 2px;
+  }
+  .target .label {
+    font-weight: 800;
+    font-size: 17px;
+    padding-left: 6px;
   }
   .hint {
     margin: 0;

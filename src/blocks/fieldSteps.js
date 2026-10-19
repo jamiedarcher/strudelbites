@@ -101,6 +101,18 @@ export class FieldSteps extends Blockly.Field {
   }
 
   /**
+   * Briefly lights up one square while its sound plays (play-along).
+   * @param {number} index - Step number (0-based).
+   */
+  flashStep(index) {
+    const cell = this.cells_[index];
+    if (!cell) return;
+    cell.classList.remove('sb-step-hit');
+    void cell.getBoundingClientRect(); // restart the animation
+    cell.classList.add('sb-step-hit');
+  }
+
+  /**
    * Text used by screen readers and copy/paste: the pattern as Strudel would write it.
    * @returns {string}
    */
