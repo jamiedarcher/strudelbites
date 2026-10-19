@@ -68,7 +68,12 @@
       "cb": "cowbell",
       "baa": "sheep",
       "birds": "bird",
-      "bubble": "bubbles"
+      "bubble": "bubbles",
+      "ht": "small tom",
+      "mt": "big tom",
+      "lt": "floor tom",
+      "cr": "crash",
+      "808cy": "ride"
     },
     "instruments": {
       "triangle": "piano",
@@ -613,5 +618,20 @@
     "t7": {
       "title": "Keys and sharps"
     }
+  },
+  "drums": {
+    "title": "Drum kit",
+    "tapHint": "Tap a drum to hear it",
+    "kick": "Bass drum (kick)",
+    "snare": "Snare drum",
+    "hihat": "Hi-hat",
+    "tom1": "Small tom",
+    "tom2": "Medium tom",
+    "floor": "Floor tom",
+    "crash": "Crash cymbal",
+    "crash2": "Crash cymbal",
+    "ride": "Ride cymbal",
+    "hihatPedal": "Hi-hat foot pedal",
+    "kickPedal": "Bass drum foot pedal"
   }
 }

@@ -12,5 +12,7 @@ The Svelte screens and pieces of the interface. Each file starts with an `@compo
 | `LessonPanel.svelte` | Clef, the spoken instruction, step dots, Listen / I see it / Help buttons. |
 | `BlocklyWorkspace.svelte` | Wraps the Blockly canvas and reports changes. |
 | `ViewPanel.svelte` | The bottom strip: **Code** view and **Staff** view of the same song. |
+| `Piano.svelte` | Narrow 88-key piano strip; keys light up as notes play. Labels are HTML text so they never stretch. |
+| `DrumKit.svelte` | Top-view five-piece drum kit; parts flash as they play; hover/tap shows names, tap plays the sound. |
 | `ConceptCard.svelte` | End-of-lesson reward pairing the music idea with the code idea. |
 | `Clef.svelte` | The treble-clef guide, with idle / talking / happy moods. |

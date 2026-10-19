@@ -8,16 +8,23 @@
 /**
  * Drum and fun sounds. `id` is the Strudel sample name (from the
  * tidalcycles/dirt-samples pack); `staff` is where the sound sits on a
- * percussion staff (VexFlow key syntax, `/x2` = an "x" notehead for cymbals).
+ * percussion staff (VexFlow key syntax, `/x2` = an "x" notehead for cymbals),
+ * following standard drum notation. `kit` is the part of the drum kit picture
+ * that lights up (see DrumKit.svelte); fun sounds have no kit part.
  */
 export const SOUNDS = [
-  { id: 'bd', emoji: '🥁', colour: '#E8590C', staff: 'f/4' },
-  { id: 'sd', emoji: '🪘', colour: '#1971C2', staff: 'c/5' },
-  { id: 'hh', emoji: '🎩', colour: '#2B8A3E', staff: 'g/5/x2' },
-  { id: 'cp', emoji: '👏', colour: '#C2255C', staff: 'd/5/x2' },
-  { id: 'cb', emoji: '🐄', colour: '#5F3DC4', staff: 'a/5/x2' },
-  { id: 'baa', emoji: '🐑', colour: '#868E96', staff: 'a/4' },
-  { id: 'birds', emoji: '🐦', colour: '#0C8599', staff: 'e/5' },
+  { id: 'bd', emoji: '🥁', colour: '#E8590C', staff: 'f/4', kit: 'kick' },
+  { id: 'sd', emoji: '🪘', colour: '#1971C2', staff: 'c/5', kit: 'snare' },
+  { id: 'hh', emoji: '🎩', colour: '#2B8A3E', staff: 'g/5/x2', kit: 'hihat' },
+  { id: 'ht', emoji: '🔹', colour: '#3B5BDB', staff: 'e/5', kit: 'tom1' },
+  { id: 'mt', emoji: '🔷', colour: '#5F3DC4', staff: 'd/5', kit: 'tom2' },
+  { id: 'lt', emoji: '🛢️', colour: '#862E9C', staff: 'a/4', kit: 'floor' },
+  { id: 'cr', emoji: '💥', colour: '#E67700', staff: 'a/5/x2', kit: 'crash' },
+  { id: '808cy', emoji: '🌕', colour: '#D9480F', staff: 'f/5/x2', kit: 'ride' },
+  { id: 'cp', emoji: '👏', colour: '#C2255C', staff: 'c/5/x2' },
+  { id: 'cb', emoji: '🐄', colour: '#5F3DC4', staff: 'b/5/x2' },
+  { id: 'baa', emoji: '🐑', colour: '#868E96', staff: 'e/4' },
+  { id: 'birds', emoji: '🐦', colour: '#0C8599', staff: 'g/4' },
   { id: 'bubble', emoji: '🫧', colour: '#3BC9DB', staff: 'd/4' },
 ];
 

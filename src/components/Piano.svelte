@@ -75,40 +75,45 @@
 </script>
 
 <div class="piano" aria-hidden="true">
-  <svg viewBox="0 0 {width} {WHITE_H}" preserveAspectRatio="none">
-    {#each whites as key (key.midi)}
-      <rect
-        x={key.x + 0.5}
-        y="0"
-        width={WHITE_W - 1}
-        height={WHITE_H}
-        rx="3"
-        class="white"
-        class:middle={key.midi === 60}
-        style:fill={lit[key.midi] ? key.colour : null}
-      />
+  <div class="board">
+    <!-- The keys stretch to fill the width (an SVG drawn without keeping its
+         shape). Words and dots are real HTML on top, placed by percentage,
+         so they never stretch and stay readable at any size. -->
+    <svg viewBox="0 0 {width} {WHITE_H}" preserveAspectRatio="none">
+      {#each whites as key (key.midi)}
+        <rect
+          x={key.x + 0.5}
+          y="0"
+          width={WHITE_W - 1}
+          height={WHITE_H}
+          rx="3"
+          class="white"
+          class:middle={key.midi === 60}
+          style:fill={lit[key.midi] ? key.colour : null}
+        />
+      {/each}
+      {#each blacks as key (key.midi)}
+        <rect
+          x={key.x}
+          y="0"
+          width={BLACK_W}
+          height={BLACK_H}
+          rx="2"
+          class="black"
+          style:fill={lit[key.midi] ? key.colour : null}
+        />
+      {/each}
+    </svg>
+    {#each keys as key (key.midi)}
+      {@const left = ((key.x + (key.black ? BLACK_W : WHITE_W) / 2) / width) * 100}
       {#if usedMidis.has(key.midi) && !lit[key.midi]}
-        <circle cx={key.x + WHITE_W / 2} cy={WHITE_H - 20} r="3.2" fill={key.colour} />
+        <span class="dot" class:on-black={key.black} style="left: {left}%; background: {key.colour}"></span>
       {/if}
       {#if key.label}
-        <text x={key.x + WHITE_W / 2} y={WHITE_H - 5} class="label" class:mid={key.midi === 60}>{key.label}</text>
+        <span class="label" class:mid={key.midi === 60} style="left: {left}%">{key.label}</span>
       {/if}
     {/each}
-    {#each blacks as key (key.midi)}
-      <rect
-        x={key.x}
-        y="0"
-        width={BLACK_W}
-        height={BLACK_H}
-        rx="2"
-        class="black"
-        style:fill={lit[key.midi] ? key.colour : null}
-      />
-      {#if usedMidis.has(key.midi) && !lit[key.midi]}
-        <circle cx={key.x + BLACK_W / 2} cy={BLACK_H - 7} r="2.6" fill={key.colour} />
-      {/if}
-    {/each}
-  </svg>
+  </div>
 </div>
 
 <style>
@@ -117,10 +122,14 @@
     background: #2b2a33;
     border-top: 3px solid var(--line);
   }
+  .board {
+    position: relative;
+    height: 56px;
+  }
   svg {
     display: block;
     width: 100%;
-    height: 56px;
+    height: 100%;
   }
   .white {
     fill: #fff;
@@ -135,15 +144,34 @@
     fill: #212529;
     transition: fill 0.06s;
   }
+  .label,
+  .dot {
+    position: absolute;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
   .label {
-    font-size: 8px;
+    bottom: 2px;
     font-family: 'Baloo 2', system-ui, sans-serif;
+    font-size: 10px;
     font-weight: 700;
-    fill: #9a948a;
-    text-anchor: middle;
+    line-height: 1;
+    color: #8a8478;
   }
   .label.mid {
-    fill: var(--purple);
-    font-size: 9px;
+    color: var(--purple);
+    font-weight: 800;
+  }
+  .dot {
+    bottom: 16px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+  .dot.on-black {
+    bottom: auto;
+    top: 46%;
+    width: 6px;
+    height: 6px;
   }
 </style>

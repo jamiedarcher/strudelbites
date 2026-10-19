@@ -4,7 +4,7 @@ Everything about the blocks learners drag around.
 
 | File | What it does |
 | --- | --- |
-| `catalog.js` | The musical materials: sounds, notes, note lengths and instruments, with their emoji, colours and staff positions. Add a sound here and it appears everywhere. |
+| `catalog.js` | The musical materials (including the full drum kit: kick, snare, hi-hat, three toms, crash, ride): sounds, notes, note lengths and instruments, with their emoji, colours and staff positions. Add a sound here and it appears everywhere. |
 | `definitions.js` | The block shapes: My song, play, beat (4 and 8 steps), faster/slower, melody (with normal / bouncy / smooth style), note, scale tune, step, chords. |
 | `fieldSteps.js` | The custom row of tappable squares used by beat blocks. |
 | `model.js` | Turns blocks into a plain **song model** (a list of tracks), then into Strudel code. Also works out play-along timing (which note is sounding). |

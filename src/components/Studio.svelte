@@ -86,6 +86,10 @@
     if (!info) return;
     const index = eventAt(info.timing, cycle);
     const { track } = info;
+    if (track.kind === 'beat' || track.kind === 'sound') {
+      const steps = track.kind === 'beat' ? track.steps : '1';
+      if (steps[index] === '1') views?.drum(track.sound);
+    }
     if (track.kind === 'beat') canvas?.hit(track.id, index);
     else if (track.kind === 'melody' || track.kind === 'scale') canvas?.hit(track.notes[index]?.id ?? track.id);
     else canvas?.hit(track.id);

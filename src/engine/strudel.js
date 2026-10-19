@@ -5,8 +5,10 @@
  * Strudel turns that code into a pattern and plays it with Web Audio. Keeping
  * all Strudel calls here means the app could swap or upgrade Strudel in one place.
  */
-import { initStrudel, samples } from '@strudel/web';
-import { getAudioContext } from 'superdough';
+// Everything comes from @strudel/web, which bundles its own copy of the
+// sound library (superdough). Importing 'superdough' separately would give a
+// second, unconnected audio system, so don't.
+import { initStrudel, samples, getAudioContext, superdough } from '@strudel/web';
 
 let replPromise = null;
 let playing = false;
@@ -156,4 +158,18 @@ export function onEngineChange(fn) {
 export function onHit(fn) {
   hitListeners.add(fn);
   return () => hitListeners.delete(fn);
+}
+
+/**
+ * Plays one sound straight away, outside the song (for tapping the drum kit).
+ * @param {string} sound - A sample name such as `"sd"`.
+ * @returns {Promise<void>}
+ * @example tap('bd') // one kick
+ */
+export async function tap(sound) {
+  await startEngine();
+  installLimiter();
+  const ac = getAudioContext();
+  if (ac.state === 'suspended') await ac.resume();
+  superdough({ s: sound }, ac.currentTime + 0.02, 0.3);
 }
