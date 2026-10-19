@@ -1,0 +1,218 @@
+<!--
+  @component
+  The strip under the block canvas with two views of the same song:
+  - Code: the real Strudel code the blocks generate, with spotlighted words.
+  - Staff: the song written as music notation.
+  When closed it shrinks to just its tabs; tapping a tab opens it.
+
+  Props:
+  - `open`, `tab` ('code' | 'staff'), `ontab(tab)`, `onclose()`.
+  - `code`, `tracks`: the current song.
+  - `focus`: words to spotlight in the code (e.g. `['~']`).
+  - `pulse`: 'code' or 'staff' to make that tab glow.
+-->
+<script>
+  import { t } from '../lib/i18n.js';
+  import { highlight } from '../lib/highlight.js';
+  import { SOUNDS } from '../blocks/catalog.js';
+
+  let { open, tab, ontab, onclose, code, tracks, focus = [], pulse = '' } = $props();
+  let staffHost = $state();
+  let width = $state(600);
+  let names = $state(true);
+  let rows = $state(0);
+  // The notation library is large, so it is only downloaded the first time the Staff tab opens.
+  let notation = $state(null);
+
+  const html = $derived(highlight(code, focus));
+  const drumSounds = $derived(
+    [...new Set(tracks.filter((tr) => tr.kind !== 'melody').map((tr) => tr.sound))]
+      .map((id) => SOUNDS.find((s) => s.id === id))
+      .filter(Boolean),
+  );
+
+  $effect(() => {
+    if (open && tab === 'staff' && !notation) {
+      import('../staff/notation.js').then((module) => (notation = module));
+    }
+  });
+
+  $effect(() => {
+    if (!open || tab !== 'staff' || !staffHost || !notation) return;
+    try {
+      rows = notation.renderStaff(staffHost, tracks, { width: Math.min(Math.max(320, width - 300), 900), names });
+    } catch (error) {
+      console.warn('Staff view could not draw this song', error);
+      rows = 0;
+    }
+  });
+</script>
+
+<section class="panel" class:open bind:clientWidth={width}>
+  <div class="tabs" role="tablist">
+    <button role="tab" class:active={open && tab === 'code'} class:pulse={pulse === 'code'} aria-selected={open && tab === 'code'} onclick={() => ontab('code')}>
+      ⌨️ {t('studio.code')}
+    </button>
+    <button role="tab" class:active={open && tab === 'staff'} class:pulse={pulse === 'staff'} aria-selected={open && tab === 'staff'} onclick={() => ontab('staff')}>
+      🎼 {t('studio.staff')}
+    </button>
+    {#if open}
+      <p class="explain">{tab === 'code' ? t('studio.codeExplain') : t('studio.staffExplain')}</p>
+      <button class="close" onclick={onclose} aria-label="Close">⌄</button>
+    {/if}
+  </div>
+
+  {#if open}
+    <div class="content">
+      {#if tab === 'code'}
+        {#if code}
+          <pre class="code">{@html html}</pre>
+        {:else}
+          <p class="empty">{t('studio.codeEmpty')}</p>
+        {/if}
+      {:else}
+        <div class="staff-row">
+          <div class="staff" bind:this={staffHost}></div>
+          <div class="staff-side">
+            <label class="toggle">
+              <input type="checkbox" bind:checked={names} />
+              {t('studio.names')}
+            </label>
+            {#if drumSounds.length}
+              <p class="small">{t('studio.drumKey')}</p>
+              <ul class="key">
+                {#each drumSounds as s (s.id)}
+                  <li style="color:{s.colour}">{s.emoji} {t(`blocks.sounds.${s.id}`)}</li>
+                {/each}
+              </ul>
+            {/if}
+          </div>
+        </div>
+        {#if !rows}
+          <p class="empty">{t('studio.staffEmpty')}</p>
+        {/if}
+      {/if}
+    </div>
+  {/if}
+</section>
+
+<style>
+  .panel {
+    background: white;
+    border-top: 3px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .panel.open {
+    height: clamp(220px, 32vh, 340px);
+  }
+  .tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+  .tabs button[role='tab'] {
+    font-size: 19px;
+    font-weight: 700;
+    border: 3px solid var(--line);
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 6px 16px;
+    min-height: 50px;
+    color: var(--ink-soft);
+  }
+  .tabs button.active {
+    background: #f3f0ff;
+    border-color: #b197fc;
+    color: var(--ink);
+  }
+  .explain {
+    margin: 0 0 0 8px;
+    color: var(--ink-soft);
+    font-size: 17px;
+    flex: 1;
+    min-width: 0;
+  }
+  .close {
+    margin-left: auto;
+    border: none;
+    background: var(--paper);
+    border-radius: 14px;
+    font-size: 26px;
+    min-width: 52px;
+    min-height: 48px;
+  }
+  .content {
+    flex: 1;
+    overflow: auto;
+    padding: 0 16px 14px;
+  }
+  .code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 21px;
+    line-height: 1.5;
+    background: #1f1d2b;
+    color: #f8f9fa;
+    padding: 14px 18px;
+    border-radius: 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+  .code :global(.tok-fn) { color: #b197fc; }
+  .code :global(.tok-str) { color: #8ce99a; }
+  .code :global(.tok-num) { color: #ffc078; }
+  .code :global(mark) {
+    background: #ffe066;
+    color: #1f1d2b;
+    border-radius: 4px;
+    padding: 0 3px;
+    animation: shine 1s ease-in-out infinite alternate;
+  }
+  @keyframes shine {
+    from { box-shadow: 0 0 0 0 #ffe06699; }
+    to { box-shadow: 0 0 0 5px #ffe06633; }
+  }
+  .empty {
+    font-size: 18px;
+    background: var(--paper);
+    padding: 12px 14px;
+    border-radius: 14px;
+    margin: 0;
+  }
+  .staff-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .staff {
+    overflow-x: auto;
+  }
+  .staff-side {
+    min-width: 200px;
+  }
+  .toggle {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 17px;
+  }
+  .toggle input {
+    width: 24px;
+    height: 24px;
+  }
+  .small {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 8px 0 4px;
+  }
+  .key {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-weight: 700;
+    font-size: 17px;
+  }
+</style>
