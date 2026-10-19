@@ -40,6 +40,10 @@ blocks → song model → Strudel code → sound
 
 See [docs/architecture.md](docs/architecture.md). Every folder in `src/` has its own README, and every exported function has a doc comment — the build fails if one is missing.
 
+## Roadmap
+
+See [docs/roadmap.md](docs/roadmap.md), including planned MIDI keyboard and e-drum support.
+
 ## Contributing
 
 New lessons, blocks and translations are very welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
