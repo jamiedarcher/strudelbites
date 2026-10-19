@@ -14,6 +14,7 @@ Snap blocks together and they become real Strudel code that plays instantly. Cle
 - **Compose**: every block, no lessons — just make music.
 - **Two views of your song**: the real **Code**, and the **Staff** (music notation with rainbow notes, flats, staccato dots, slurs and chords).
 - **Play-along**: blocks, beat squares and staff notes light up as they sound; Clef dances in time.
+- **Piano strip**: a narrow 88-key piano under the Code/Staff views lights up each note as it plays.
 - **Safe volume**: a built-in limiter keeps everything at a comfortable level.
 - Clef speaks every instruction; blocks are picture-first; big touch targets for iPad.
 - Player profiles with stars, saved in the browser. No accounts.

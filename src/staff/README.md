@@ -11,3 +11,7 @@ VexFlow is large, so this module is loaded only when the Staff tab is first open
 Also drawn: flats (♭) in minor scales, staccato dots, legato slurs, chords stacked on one stem, and speed changes (twice as fast halves every note).
 
 **Play-along:** `renderStaff` returns a map from each sound to its drawn note; `markPlaying` makes that note glow while it is heard.
+
+## Piano strip
+
+`components/Piano.svelte` shows a narrow 88-key piano (A0–C8) under the Code/Staff views. Keys used in the song carry a dot in their note colour; while music plays, keys light up for exactly as long as each note sounds. Middle C (C4) is highlighted as a landmark.

@@ -24,7 +24,8 @@
   import { speak, stopSpeaking, setVoiceEnabled } from '../lib/speech.js';
   import { app, TEMPOS, persist, activeProfile, saveWorkspace, saveStep, completeLesson } from '../lib/store.svelte.js';
   import { play, preview, stop, setTempo, isPlaying, onEngineChange, onHit } from '../engine/strudel.js';
-  import { songCode, flattenLeaves, leafTiming, eventAt } from '../blocks/model.js';
+  import { songCode, flattenLeaves, leafTiming, eventAt, chordNotes } from '../blocks/model.js';
+  import { SCALES, byId } from '../blocks/catalog.js';
   import { ALL_BLOCKS } from '../blocks/definitions.js';
   import { nextLesson } from '../lessons/index.js';
   import BlocklyWorkspace from './BlocklyWorkspace.svelte';
@@ -89,6 +90,18 @@
     else if (track.kind === 'melody' || track.kind === 'scale') canvas?.hit(track.notes[index]?.id ?? track.id);
     else canvas?.hit(track.id);
     views?.now(leaf, index);
+
+    // Light the piano keys for pitched notes, for as long as the note lasts.
+    let pitches = [];
+    if (track.kind === 'melody') pitches = [track.notes[index]?.pitch];
+    if (track.kind === 'scale') pitches = [byId(SCALES, track.scale)?.notes[Number(track.notes[index]?.degree)]];
+    if (track.kind === 'chords') pitches = chordNotes(track.chords[index]);
+    pitches = pitches.filter((p) => p && p !== 'rest');
+    if (pitches.length) {
+      const { starts, loop } = info.timing;
+      const cycles = ((starts[index + 1] ?? 1) - starts[index]) * loop;
+      views?.keys(pitches, cycles / TEMPOS[app.tempo].cps);
+    }
   }
 
   /**

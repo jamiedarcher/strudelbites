@@ -11,13 +11,18 @@
   - `focus`: words to spotlight in the code (e.g. `['~']`).
   - `pulse`: 'code' or 'staff' to make that tab glow.
 
-  Exposes `now(leaf, index)`: lights up the note being played on the staff.
+  A narrow 88-key piano runs along the bottom, open or closed (see Piano.svelte).
+
+  Exposes `now(leaf, index)`: lights up the note being played on the staff, and
+  `keys(names, seconds)`: lights up piano keys while notes sound.
 -->
 <script>
   import { t } from '../lib/i18n.js';
   import { highlight } from '../lib/highlight.js';
   import { SOUNDS } from '../blocks/catalog.js';
-  import { flattenLeaves } from '../blocks/model.js';
+  import { flattenLeaves, chordNotes } from '../blocks/model.js';
+  import { SCALES, byId } from '../blocks/catalog.js';
+  import Piano from './Piano.svelte';
 
   let { open, tab, ontab, onclose, code, tracks, focus = [], pulse = '' } = $props();
   let staffHost = $state();
@@ -25,6 +30,17 @@
   let names = $state(true);
   let rows = $state(0);
   let events = new Map();
+  let piano;
+
+  // Every pitched note in the song, so the piano can mark where the tune lives.
+  const usedNotes = $derived(
+    flattenLeaves(tracks).flatMap(({ track }) => {
+      if (track.kind === 'melody') return track.notes.map((n) => n.pitch);
+      if (track.kind === 'scale') return track.notes.map((n) => byId(SCALES, track.scale)?.notes[Number(n.degree)]);
+      if (track.kind === 'chords') return track.chords.flatMap(chordNotes);
+      return [];
+    }),
+  );
   // The notation library is large, so it is only downloaded the first time the Staff tab opens.
   let notation = $state(null);
 
@@ -61,6 +77,15 @@
    */
   export function now(leaf, index) {
     if (open && tab === 'staff' && notation) notation.markPlaying(events, leaf, index);
+  }
+
+  /**
+   * Lights up piano keys while notes sound.
+   * @param {string[]} names - Note names, e.g. `['c4', 'e4', 'g4']`.
+   * @param {number} seconds - How long they sound.
+   */
+  export function keys(names, seconds) {
+    piano?.press(names, seconds);
   }
 </script>
 
@@ -110,6 +135,8 @@
       {/if}
     </div>
   {/if}
+
+  <Piano bind:this={piano} used={usedNotes} />
 </section>
 
 <style>
@@ -121,7 +148,7 @@
     min-width: 0;
   }
   .panel.open {
-    height: clamp(220px, 32vh, 340px);
+    height: clamp(280px, 40vh, 410px);
   }
   .tabs {
     display: flex;
@@ -162,6 +189,7 @@
   }
   .content {
     flex: 1;
+    min-height: 0;
     overflow: auto;
     padding: 0 16px 14px;
   }
